@@ -62,6 +62,25 @@ python query.py
 ```
 
 ## Ray Serve
+Launch the Ray application.
+
+```bash
+cd ray_serve
+```
+
+```bash
+python deploy.py
+```
+
+Query the model.
+
+```bash
+cd ray_serve
+```
+
+```bash
+python query.py
+```
 
 ## Ray + Triton
 

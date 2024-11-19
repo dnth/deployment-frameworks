@@ -1,7 +1,6 @@
 import io
 from typing import Dict
 
-import requests
 import torch
 from PIL import Image
 from ray import serve
