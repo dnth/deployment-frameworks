@@ -1,6 +1,7 @@
 name: "resnet50"
 backend: "pytorch"
-max_batch_size: 16
+max_batch_size: 128
+dynamic_batching { }
 input [
   {
     name: "input__0"
@@ -15,9 +16,4 @@ output [
     dims: [ 1000 ]
   }
 ]
-instance_group [
-  {
-    count: 4
-    kind: KIND_GPU
-  }
-]
+instance_group [ { count: 2, kind: KIND_GPU }]
