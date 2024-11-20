@@ -1,8 +1,16 @@
+import os
+
 import numpy as np
 import torchvision.transforms as transforms
 import tritonclient.http as httpclient
 from PIL import Image
 from tritonclient.utils import triton_to_np_dtype
+
+
+def load_imagenet_classes(path="imagenet_classes.txt"):
+    with open(path) as f:
+        categories = [s.strip() for s in f.readlines()]
+    return categories
 
 
 # Preprocess the image
@@ -20,6 +28,9 @@ def preprocess_image(image_path):
     input_batch = input_tensor.unsqueeze(0)
     return input_batch.numpy()
 
+
+# Load ImageNet classes and get the class name
+classes = load_imagenet_classes()
 
 # Set up the client
 client = httpclient.InferenceServerClient(url="localhost:8000")
@@ -41,5 +52,7 @@ results = client.infer(model_name="resnet50", inputs=inputs, outputs=outputs)
 
 # Get and process the results
 output = results.as_numpy("output__0")
-predicted_class = np.argmax(output)
-print(f"Predicted class: {predicted_class}")
+predicted_idx = np.argmax(output)
+
+predicted_class = classes[predicted_idx]
+print(f"Predicted class: {predicted_class} (index: {predicted_idx})")
