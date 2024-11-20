@@ -56,9 +56,13 @@ Query the model.
 ```bash
 cd triton_inference_server/image_classification_resnet50
 ```
-
+With a single image inference.
 ```bash
-python query.py
+python single_inference.py
+```
+Or batch inference.
+```bash
+python batch_inference.py
 ```
 
 ## Ray Serve
