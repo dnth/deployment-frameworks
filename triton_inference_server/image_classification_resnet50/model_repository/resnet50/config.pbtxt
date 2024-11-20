@@ -1,6 +1,6 @@
 name: "resnet50"
 backend: "pytorch"
-max_batch_size: 8
+max_batch_size: 16
 input [
   {
     name: "input__0"
@@ -17,7 +17,7 @@ output [
 ]
 instance_group [
   {
-    count: 1
+    count: 4
     kind: KIND_GPU
   }
 ]

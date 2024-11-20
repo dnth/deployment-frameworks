@@ -1,10 +1,9 @@
-import os
+import time
 
 import numpy as np
 import torchvision.transforms as transforms
 import tritonclient.http as httpclient
 from PIL import Image
-from tritonclient.utils import triton_to_np_dtype
 
 
 def load_imagenet_classes(path="imagenet_classes.txt"):
@@ -48,10 +47,20 @@ client = httpclient.InferenceServerClient(url="localhost:8000")
 image_paths = [
     "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000139.jpg",
     "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000285.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000632.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000724.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000776.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000785.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000802.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000872.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000000885.jpg",
+    "/home/dnth/Desktop/x.retrieval/nbs/data/coco/val2017/000000001000.jpg",
     # Add more paths as needed
 ]
 
 # Prepare batch input
+start_time = time.time()
+
 input_data = preprocess_images(image_paths)
 
 # Set up the input
@@ -64,6 +73,9 @@ outputs = [httpclient.InferRequestedOutput("output__0", binary_data=True)]
 # Send inference request
 results = client.infer(model_name="resnet50", inputs=inputs, outputs=outputs)
 
+end_time = time.time()
+inference_time = end_time - start_time
+
 # Process batch results
 output = results.as_numpy("output__0")
 predicted_idx = np.argmax(output, axis=1)  # Note the axis=1 for batch processing
@@ -72,3 +84,7 @@ predicted_idx = np.argmax(output, axis=1)  # Note the axis=1 for batch processin
 for i, idx in enumerate(predicted_idx):
     predicted_class = classes[idx]
     print(f"Image {i+1} - Predicted class: {predicted_class} (index: {idx})")
+
+# Print timing information
+print(f"\nTotal time taken: {inference_time*1000:.3f} ms")
+print(f"Average time per image: {inference_time/len(image_paths)*1000:.3f} ms")
