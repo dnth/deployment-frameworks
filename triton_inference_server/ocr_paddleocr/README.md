@@ -24,6 +24,11 @@ docker run --gpus all --rm \
 ```
 
 ## Query Triton Server
+Install the triton client
+
+```bash
+pip install "tritonclient[all]" 
+```
 
 ```bash
 python inference.py
