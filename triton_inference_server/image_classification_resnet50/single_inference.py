@@ -37,7 +37,7 @@ client = httpclient.InferenceServerClient(url="localhost:8000")
 
 # Prepare the input data
 input_data = preprocess_image(
-    "/home/dnth/Desktop/xinfer/assets/demo/0a6ee446579d2885.jpg"
+    "/home/dnth/Desktop/x.infer/assets/demo/0a6ee446579d2885.jpg"
 )
 
 # Set up the input
